@@ -1,0 +1,150 @@
+/* Feed grid – replaces bootstrap row/col (must load after tailwind) */
+._feed_layout_row {
+  display: flex;
+  flex-wrap: wrap;
+  margin-right: -12px;
+  margin-left: -12px;
+}
+
+._feed_col_side,
+._feed_col_main {
+  position: relative;
+  width: 100%;
+  padding-right: 12px;
+  padding-left: 12px;
+}
+
+@media (min-width: 992px) {
+  ._feed_layout_row {
+    flex-wrap: nowrap;
+  }
+
+  ._feed_col_side {
+    flex: 0 0 25% !important;
+    max-width: 25% !important;
+    width: 25% !important;
+  }
+
+  ._feed_col_main {
+    flex: 0 0 50% !important;
+    max-width: 50% !important;
+    width: 50% !important;
+    min-width: 0 !important;
+  }
+}
+
+._feed_inner_ppl_card_area_list._feed_stories_scrollable {
+  justify-content: flex-start !important;
+  overflow-x: auto !important;
+  flex-wrap: nowrap !important;
+}
+
+._feed_stories_track {
+  display: flex;
+  flex-wrap: nowrap;
+  gap: 12px;
+  overflow-x: auto;
+  overflow-y: hidden;
+  width: 100%;
+  min-width: 0;
+  padding-right: 32px;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+}
+
+._feed_stories_track::-webkit-scrollbar {
+  display: none;
+}
+
+._feed_stories_item {
+  flex: 0 0 auto;
+  min-width: 140px;
+  width: 25%;
+  max-width: 180px;
+}
+
+@media (max-width: 991px) {
+  ._feed_inner_ppl_card {
+    display: none !important;
+  }
+
+  ._feed_inner_ppl_card_mobile {
+    display: block !important;
+  }
+}
+
+@media (min-width: 992px) {
+  ._feed_inner_ppl_card {
+    display: block !important;
+  }
+
+  ._feed_inner_ppl_card_mobile {
+    display: none !important;
+  }
+}
+
+/* Feed search */
+._feed_search_bar {
+  background: var(--bg2);
+  padding: 16px 16px 0;
+}
+
+._feed_search_form {
+  position: relative;
+  width: 100%;
+}
+
+._feed_search_clear {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  border: none;
+  background: transparent;
+  color: #0acf83;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 0;
+}
+
+._header_mobile_search {
+  border: none;
+  background: transparent;
+  padding: 0;
+}
+
+._header_mobile_toggle_top {
+  display: block;
+  margin: 0;
+}
+
+._header_mobile_theme_btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+}
+
+._header_mobile_search_panel {
+  margin: 0 0 12px;
+}
+
+._header_mobile_search_form {
+  width: 100%;
+}
+
+._header_mobile_search_form ._inpt1 {
+  width: 100%;
+}
+
+._previous_comment_sticky {
+  position: sticky;
+  bottom: 0;
+  padding-top: 8px;
+  background: var(--bg2);
+}
+
+._dark_wrapper ._previous_comment_sticky {
+  background: var(--bg5);
+}

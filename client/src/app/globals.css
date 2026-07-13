@@ -1,0 +1,253 @@
+@import "tailwindcss";
+
+:root {
+  --color: #2D3748;
+  --color1: #1A202C;
+  --color2: #312000;
+  --color3: #C4C4C4;
+  --color4: #4A5568;
+  --color5: #1890FF;
+  --color6: #212121;
+  --color7: #666666;
+  --color8: #0ACF83;
+  --color9: #e8f4ff;
+  --bg1: #F0F2F5;
+  --bg2: #FFFFFF;
+  --bg3: #F5F5F5;
+  --bg4: #DFDFDF;
+  --bg5: #112032;
+  --bg6: #232E42;
+  --bcolor1: #F0F2F5;
+  --bcolor2: #E8E8E8;
+  --bcolor3: #F5F5F5;
+  
+  --b-shadow1: 7.5px 20px 7.5px 20px rgba(108, 126, 147, 0.15);
+  --b-shadow2: 7.43px 49.03px 7.5px 49.03px rgba(108, 126, 147, 0.1);
+  --b-shadow3: 7px 42px 7px 42px rgba(108, 126, 147, 0.15);
+  --b-shadow4: 0px 2px 0px 2px rgba(108, 126, 147, 0.15);
+  --b-shadow5: 0px 3px 0px 3px rgba(108, 126, 147, 0.15);
+  --b-shadow6: 0px 4px 0px 4px rgba(108, 126, 147, 0.15);
+}
+
+.dark {
+  /* Define dark mode overrides here if needed, or _dark_wrapper */
+  --bg1: #112032;
+  --bg2: #232E42;
+  --color: #FFFFFF;
+  --color1: #FFFFFF;
+  --color2: #FFFFFF;
+  --color4: #E2E8F0;
+  --color6: #FFFFFF;
+  --color7: #E2E8F0;
+  --bcolor1: #2D3748;
+  --bcolor2: #4A5568;
+  --bcolor3: #2D3748;
+  --bg3: #1A202C;
+  --bg4: #2D3748;
+}
+
+@theme inline {
+  --color-color: var(--color);
+  --color-color1: var(--color1);
+  --color-color2: var(--color2);
+  --color-color3: var(--color3);
+  --color-color4: var(--color4);
+  --color-color5: var(--color5);
+  --color-color6: var(--color6);
+  --color-color7: var(--color7);
+  --color-color8: var(--color8);
+  --color-color9: var(--color9);
+
+  --color-bg1: var(--bg1);
+  --color-bg2: var(--bg2);
+  --color-bg3: var(--bg3);
+  --color-bg4: var(--bg4);
+  --color-bg5: var(--bg5);
+  --color-bg6: var(--bg6);
+
+  --color-bcolor1: var(--bcolor1);
+  --color-bcolor2: var(--bcolor2);
+  --color-bcolor3: var(--bcolor3);
+
+  --shadow-shadow1: var(--b-shadow1);
+  --shadow-shadow2: var(--b-shadow2);
+  --shadow-shadow3: var(--b-shadow3);
+  --shadow-shadow4: var(--b-shadow4);
+  --shadow-shadow5: var(--b-shadow5);
+  --shadow-shadow6: var(--b-shadow6);
+
+  --font-sans: 'Poppins', sans-serif;
+}
+
+body {
+  background-color: var(--bg1);
+  color: var(--color);
+  font-family: 'Poppins', sans-serif;
+}
+
+/* Feed layout helpers (replaces bootstrap container/row behavior) */
+._custom_container {
+  width: 100%;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 12px;
+  padding-right: 12px;
+}
+
+@media (min-width: 992px) and (max-width: 1199px) {
+  ._custom_container {
+    max-width: 1160px;
+  }
+}
+
+@media (min-width: 1200px) {
+  ._custom_container {
+    max-width: 1320px;
+  }
+}
+
+._header_nav ._nav_custom_container {
+  display: flex;
+  flex-wrap: inherit;
+  align-items: center;
+  justify-content: space-between;
+}
+
+._header_nav_list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+._left_inner_area_explore_list,
+._nav_dropdown_list,
+._notification_list,
+._feed_timeline_dropdown_list,
+._comment_reply_list,
+._mobile_navigation_bottom_list,
+._feed_inner_ppl_card_area_list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+/* Feed grid (replaces bootstrap row + col-xl-3/col-xl-6) */
+._feed_layout_row {
+  display: flex;
+  flex-wrap: wrap;
+  margin-right: -12px;
+  margin-left: -12px;
+}
+
+._feed_col_side,
+._feed_col_main {
+  position: relative;
+  width: 100%;
+  padding-right: 12px;
+  padding-left: 12px;
+}
+
+@media (min-width: 992px) {
+  ._feed_layout_row {
+    flex-wrap: nowrap;
+  }
+
+  ._feed_col_side {
+    flex: 0 0 25%;
+    max-width: 25%;
+    width: 25%;
+  }
+
+  ._feed_col_main {
+    flex: 0 0 50%;
+    max-width: 50%;
+    width: 50%;
+  }
+}
+
+/* Navbar collapse without bootstrap */
+#navbarSupportedContent {
+  display: flex !important;
+  flex-basis: auto;
+  flex-grow: 1;
+  align-items: center;
+  flex-wrap: nowrap;
+  gap: 8px;
+}
+
+._header_nav ._header_form {
+  flex-shrink: 1;
+  min-width: 0;
+}
+
+._header_nav ._header_nav_list {
+  flex-shrink: 0;
+}
+
+._header_nav ._header_nav_profile {
+  flex-shrink: 0;
+}
+
+@media (max-width: 1199px) {
+  ._header_nav ._inpt1 {
+    width: 280px;
+  }
+}
+
+/* Post modal – override global img { width:100%; height:100% } from common.css */
+.post-create-modal img {
+  width: auto;
+  height: auto;
+}
+
+/* Auth pages – override global img */
+._social_login_wrapper img,
+._social_registration_wrapper img {
+  width: auto !important;
+  height: auto !important;
+  max-width: 100%;
+  display: block;
+}
+
+/* Feed stories – fix global img height:100% collapse */
+._feed_inner_ppl_card img,
+._feed_inner_ppl_card_mobile img {
+  width: 100% !important;
+  height: auto !important;
+  display: block;
+}
+
+._social_registration_form_check_input {
+  width: 14px !important;
+  height: 14px !important;
+  min-width: 14px;
+  border: 1px solid #d1d5db;
+  border-radius: 4px !important;
+  appearance: none;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+._social_registration_form_check_input._terms_checkbox {
+  border-radius: 4px !important;
+  position: relative;
+}
+
+._social_registration_form_check_input._terms_checkbox:checked {
+  background-color: var(--color5) !important;
+  border-color: var(--color5) !important;
+}
+
+._social_registration_form_check_input._terms_checkbox:checked::before {
+  content: '';
+  position: absolute;
+  top: 1px;
+  left: 4px;
+  width: 4px;
+  height: 8px;
+  border: solid #fff;
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg);
+  border-radius: 0;
+  background: transparent;
+}

@@ -1,14 +1,17 @@
 const { connectDatabase } = require("../db/mysql");
-const { v4: uuid } = require("uuid");
+
 
 const createFeedQuery = async (userId, content, image, visibility) => {
     const db = await connectDatabase();
-    const id = uuid();
+
     await db.query(
-        "INSERT INTO posts (id, user_id, content, image, visibility) VALUES (?, ?, ?, ?, ?)",
-        [id, userId, content, image || null, visibility || 'public']
+        "INSERT INTO posts ( user_id, content, image, visibility) VALUES (?, ?, ?, ?)",
+        [ userId, content, image || null, visibility || 'public']
     );
-    return id;
+    return {
+      success: true,
+      message: 'Post created successfully',
+    };
 };
 
 const getFeedsQuery = async (userId, limit, offset) => {

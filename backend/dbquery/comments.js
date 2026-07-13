@@ -1,14 +1,15 @@
 const { connectDatabase } = require("../db/mysql");
-const { v4: uuid } = require("uuid");
 
 const createCommentQuery = async (postId, userId, content, image = null) => {
     const db = await connectDatabase();
-    const id = uuid();
     await db.query(
-        "INSERT INTO comments (id, post_id, user_id, content, image) VALUES (?, ?, ?, ?, ?)",
-        [id, postId, userId, content, image]
+        "INSERT INTO comments (post_id, user_id, content, image) VALUES (?, ?, ?, ?)",
+        [postId, userId, content, image]
     );
-    return id;
+    return {
+      success: true,
+      message: 'Comment created successfully',
+    };
 };
 
 const getCommentsCountQuery = async (postId) => {

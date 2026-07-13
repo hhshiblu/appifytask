@@ -1,40 +1,32 @@
-const API_URL = process.env.NEXT_PUBLIC_API_URL ||process.env.API_URL || 'http://localhost:4000';
+"use server";
+import { revalidatePath } from "next/cache";
+import { getServerHeaders } from "./cookies";
+
+const API_URL = process.env.API_URL || process.env.NEXT_PUBLIC_API_URL || 'http://localhost:7050';
 
 export async function getReplies(commentId, page = 1, limit = 20) {
   try {
-    const res = await fetch(`${API_URL}/api/replys/${commentId}?page=${page}&limit=${limit}`);
-  const data = await res.json();
-  return {
-    success: true,
-    replies: data.data || [],
-  };
-  } catch {
-    return {
-      success: false,
-      message: 'Failed to get replies',
-    };
+    const res = await fetch(`${API_URL}/api/replys/${commentId}?page=${page}&limit=${limit}`, {
+      headers: await getServerHeaders({ 'Content-Type': 'application/json' }),
+    });
+    const data = await res.json();
+    return data.data || [];
+  } catch (error) {
+    console.error("Error getting replies:", error);
+    return [];
   }
 }
 
-export async function createReply(commentId, formData) {
-  const content = formData.get('content')?.toString().trim() || '';
-  const image = formData.get('image');
-
-  if (!content && !(image instanceof File && image.size > 0)) {
-    return { success: false, message: 'Reply cannot be empty' };
-  }
-
+export async function createReply(formData) {
   try {
     const res = await fetch(`${API_URL}/api/replys`, {
       method: 'POST',
-      body: JSON.stringify({ commentId, content, image }),
-      credentials: 'include',
-      headers: {
-        'Content-Type': 'application/json',
-      },
+      body: formData,
+      headers: await getServerHeaders(),
     });
     const data = await res.json();
-    return { success: true, id: data.data?.id };
+    revalidatePath('/feed');
+    return data;
   } catch (error) {
     return { success: false, message: error.message };
   }

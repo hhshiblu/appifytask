@@ -1,9 +1,9 @@
 const router = require("express").Router()
-const { getCommentsController, createCommentController } = require("../controllers/comments")
+const { getRepliesController, createReplyController } = require("../controllers/replys")
 const authMiddleware = require("../middleware/auth")
-const { uploadComment } = require("../middleware/upload")
+const { uploadReply } = require("../middleware/upload")
 
-router.get("/:postId", authMiddleware, getCommentsController)
-router.post("/", authMiddleware, uploadComment.single("image"), createCommentController)
+router.get("/:commentId", authMiddleware, getRepliesController)
+router.post("/", authMiddleware, uploadReply.single("image"), createReplyController)
 
 module.exports = router

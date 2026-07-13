@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useCallback, useEffect, useMemo, useRef, useState, useTransition } from 'react';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { getFeeds } from '../../actions/feed';
 import { PostCard } from './PostCard';
@@ -12,38 +12,57 @@ export default function FeedList({ user, initialPosts = [], initialHasMore = fal
   const [posts, setPosts] = useState(initialPosts);
   const [page, setPage] = useState(1);
   const [hasMore, setHasMore] = useState(initialHasMore);
-  const [isPending, startTransition] = useTransition();
+  const [loadingMore, setLoadingMore] = useState(false);
   const loaderRef = useRef(null);
+  const loadingMoreRef = useRef(false);
 
   const visiblePosts = useMemo(
     () => filterPostsBySearch(posts, searchQuery),
     [posts, searchQuery]
   );
 
-  const loadMore = useCallback(() => {
-    if (!hasMore || isPending || searchQuery) return;
+  const loadMore = useCallback(async () => {
+    if (!hasMore || loadingMoreRef.current) return;
 
-    startTransition(async () => {
+    loadingMoreRef.current = true;
+    setLoadingMore(true);
+
+    try {
       const nextPage = page + 1;
       const { posts: newPosts, hasMore: more } = await getFeeds(nextPage, 10);
       setPosts((prev) => [...prev, ...newPosts]);
       setPage(nextPage);
       setHasMore(more);
-    });
-  }, [hasMore, isPending, page, searchQuery]);
+    } finally {
+      loadingMoreRef.current = false;
+      setLoadingMore(false);
+    }
+  }, [hasMore, page, searchQuery]);
 
   useEffect(() => {
+    const sentinel = loaderRef.current;
+    if (!sentinel || searchQuery || !hasMore) return;
+
+    const scrollRoot =
+      sentinel.closest('._layout_middle_wrap') ||
+      sentinel.closest('[data-feed-scroll]');
+
     const observer = new IntersectionObserver(
       (entries) => {
-        if (entries[0].isIntersecting) loadMore();
+        if (entries[0]?.isIntersecting) {
+          loadMore();
+        }
       },
-      { threshold: 0.1 }
+      {
+        root: scrollRoot,
+        rootMargin: '120px',
+        threshold: 0,
+      }
     );
 
-    const el = loaderRef.current;
-    if (el) observer.observe(el);
-    return () => { if (el) observer.unobserve(el); };
-  }, [loadMore]);
+    observer.observe(sentinel);
+    return () => observer.disconnect();
+  }, [loadMore, hasMore, searchQuery]);
 
   const refreshPosts = useCallback(async () => {
     const { posts: fresh, hasMore: more } = await getFeeds(1, 10);
@@ -77,8 +96,8 @@ export default function FeedList({ user, initialPosts = [], initialHasMore = fal
         <PostCard key={post.id} post={post} user={user} />
       ))}
 
-      <div ref={loaderRef} className="py-6 text-center">
-        {isPending && <p className="text-color4 text-sm">Loading more posts...</p>}
+      <div ref={loaderRef} className="py-6 text-center min-h-[48px]">
+        {loadingMore && <p className="text-color4 text-sm">Loading more posts...</p>}
         {!searchQuery && !hasMore && posts.length > 0 && (
           <p className="text-color4 text-sm">No more posts</p>
         )}

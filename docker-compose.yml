@@ -1,34 +1,61 @@
 services:
-  appify-task-mysql:
+  appify-mysql:
     image: mysql:8.0
-    container_name: appify-task-mysql
+    container_name: appify-mysql
     restart: always
+    env_file: .env
     environment:
-      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
       MYSQL_DATABASE: ${DB_NAME}
       MYSQL_USER: ${DB_USER}
       MYSQL_PASSWORD: ${DB_PASSWORD}
     ports:
-      - "${DB_PORT}:3306"
+      - "${MYSQL_HOST_PORT}:3306"
     volumes:
       - mysql_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u${DB_USER}", "-p${DB_PASSWORD}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
     networks:
       - app-network
 
-  appify-task-redis:
-    image: redis:7-alpine
-    container_name: appify-task-redis
-    restart: always
+  appify-backend:
+    build:
+      context: ./backend
+    container_name: appify-backend
+    restart: unless-stopped
+    env_file: .env
+    environment:
+      PORT: ${BACKEND_PORT}
     ports:
-      - "${REDIS_PORT}:6379"
+      - "${BACKEND_PORT}:7050"
     volumes:
-      - redis_data:/data
+      - ./backend/uploads:/app/uploads
+    depends_on:
+      appify-mysql:
+        condition: service_healthy
+    networks:
+      - app-network
+
+  appify-client:
+    build:
+      context: ./client
+    container_name: appify-client
+    restart: unless-stopped
+    env_file: .env
+    environment:
+      PORT: ${CLIENT_PORT}
+    ports:
+      - "${CLIENT_PORT}:${CLIENT_PORT}"
+    depends_on:
+      - appify-backend
     networks:
       - app-network
 
 volumes:
   mysql_data:
-  redis_data:
 
 networks:
   app-network:

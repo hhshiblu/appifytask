@@ -30,6 +30,7 @@ export default function PostComposer({ user, onOpenModal }) {
      if (data.success) {
       toast.success(data.message);
       setContent('');
+      if (window.refreshFeed) window.refreshFeed();
     } else {
       toast.error(data.message);
     }

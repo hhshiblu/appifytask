@@ -8,8 +8,8 @@ const createReplyController = async (req, res) => {
         }
         const userId = req.user.id;
         const image = req.file ? `replies/${req.file.filename}` : null;
-        const id = await createReplyService(commentId, userId, content?.trim() || '', image);
-        res.status(201).json({ success: true, data: { id } });
+        const result = await createReplyService(commentId, userId, content?.trim() || '', image);
+        res.status(201).json(result);
     } catch (error) {
         res.status(500).json({ success: false, message: error.message });
     }

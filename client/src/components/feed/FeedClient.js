@@ -10,7 +10,7 @@ import FeedRightSidebar from './FeedRightSidebar';
 import PostComposer from './PostComposer';
 import PostCreateModal from './PostCreateModal';
 import FeedList from './FeedList';
-import FeedSearchBar from './FeedSearchBar';
+
 
 export default function FeedClient({ user, initialPosts = [], initialHasMore = false, backendOffline = false }) {
   const { theme, toggleTheme } = useTheme();
@@ -43,8 +43,8 @@ export default function FeedClient({ user, initialPosts = [], initialHasMore = f
                 <FeedLeftSidebar />
               </div>
 
-              <div className="_feed_col_main overflow-x-hidden! overflow-y-auto! w-full!">
-                <div className="_layout_middle_wrap overflow-x-hidden! overflow-y-auto! w-full!">
+              <div className="_feed_col_main overflow-x-hidden! w-full!">
+                <div className="_layout_middle_wrap overflow-x-hidden! overflow-y-auto! w-full!" data-feed-scroll>
                   <div className="_layout_middle_inner">
                     <FeedStories />
 

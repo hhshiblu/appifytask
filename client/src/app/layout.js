@@ -13,9 +13,37 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || process.env.SITE_URL || "http://localhost:3000";
+
 export const metadata = {
   title: "Buddy Script - Feed",
   description: "Social feed",
+  metadataBase: new URL(siteUrl),
+  icons: {
+    icon: "/assets/images/logo-copy.svg",
+    shortcut: "/assets/images/logo-copy.svg",
+    apple: "/assets/images/logo-copy.svg",
+  },
+  openGraph: {
+    title: "Buddy Script",
+    description: "Social feed",
+    siteName: "BuddyScript",
+    type: "website",
+    images: [
+      {
+        url: "/assets/images/logo-copy.svg",
+        width: 20,
+        height: 24,
+        alt: "BuddyScript logo",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary",
+    title: "Buddy Script",
+    description: "Social feed",
+    images: ["/assets/images/logo-copy.svg"],
+  },
 };
 
 export default function RootLayout({ children }) {

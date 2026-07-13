@@ -338,11 +338,12 @@ function CommentItem({ comment, userInitial, onReplyAdded, onCountChange }) {
     if (!replyText.trim() && !replyImage) return;
 
     const formData = new FormData();
+    formData.append('commentId', comment.id);
     if (replyText.trim()) formData.append('content', replyText.trim());
     if (replyImage) formData.append('image', replyImage);
 
     startTransition(async () => {
-      const result = await createReply(comment.id, formData);
+      const result = await createReply(formData);
       if (result.success) {
         setReplyText('');
         setReplyImage(null);
@@ -351,7 +352,6 @@ function CommentItem({ comment, userInitial, onReplyAdded, onCountChange }) {
         setShowReplyForm(false);
         setRepliesCount((c) => c + 1);
         onCountChange?.(1);
-        await revalidateFeed();
         onReplyAdded?.();
       } else {
         toast.error(result.message || 'Failed to post reply');
@@ -454,18 +454,19 @@ function CommentSection({ postId, initialCount = 0, user, onCountChange }) {
     if (!commentText.trim() && !commentImage) return;
 
     const formData = new FormData();
+    formData.append('postId', postId);
     if (commentText.trim()) formData.append('content', commentText.trim());
     if (commentImage) formData.append('image', commentImage);
 
     startTransition(async () => {
-      const result = await createComment(postId, formData);
+      const result = await createComment(formData);
+
       if (result.success) {
         setCommentText('');
         setCommentImage(null);
         const nextCount = comments.length + 1;
         setLoaded(true);
-        onCountChange?.(1);
-        await revalidateFeed();
+        onCountChange?.(1);   
         await refreshVisibleComments(Math.max(nextCount, INITIAL_COMMENTS));
       } else {
         toast.error(result.message || 'Failed to post comment');

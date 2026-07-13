@@ -1,14 +1,15 @@
 const { connectDatabase } = require("../db/mysql");
-const { v4: uuid } = require("uuid");
 
 const createReplyQuery = async (commentId, userId, content, image = null) => {
     const db = await connectDatabase();
-    const id = uuid();
     await db.query(
-        "INSERT INTO replies (id, comment_id, user_id, content, image) VALUES (?, ?, ?, ?, ?)",
-        [id, commentId, userId, content, image]
+        "INSERT INTO replies (comment_id, user_id, content, image) VALUES (?, ?, ?, ?)",
+        [commentId, userId, content, image]
     );
-    return id;
+    return {
+      success: true,
+      message: 'Reply created successfully',
+    };
 };
 
 const getRepliesQuery = async (commentId, userId, limit, offset) => {

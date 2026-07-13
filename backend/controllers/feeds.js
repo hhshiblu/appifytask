@@ -5,8 +5,8 @@ const createFeedController = async (req, res) => {
         const { content, visibility } = req.body;
         const image = req.file ? req.file.filename : null;
         const userId = req.user.id;
-        const id = await createFeedService(userId, content, image, visibility);
-        res.status(201).json({ success: true, data: { id } });
+        const result = await createFeedService(userId, content, image, visibility);
+        res.status(201).json(result);
     } catch (error) {
         res.status(500).json({ success: false, message: error.message });
     }

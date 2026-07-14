@@ -2,6 +2,7 @@
 import { revalidatePath } from "next/cache";
 import { getServerHeaders } from "./cookies";
 const API_URL = process.env.API_URL || process.env.NEXT_PUBLIC_API_URL || 'http://localhost:7050';
+console.log('API_URL', API_URL);
 
 export async function getComments(postId, { limit = 2, offset = 0 } = {}) {
   const res = await fetch(`${API_URL}/api/comments/${postId}?limit=${limit}&offset=${offset}`, {

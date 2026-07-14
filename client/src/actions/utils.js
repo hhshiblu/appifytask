@@ -1,5 +1,3 @@
-const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000';
-
 export function getFirstName(user) {
   return user?.first_name || 'User';
 }
@@ -26,12 +24,6 @@ export function formatTimeAgo(dateString) {
   if (days < 7) return `${days}d ago`;
 
   return date.toLocaleDateString();
-}
-
-export function getUploadUrl(filename) {
-  if (!filename) return null;
-  if (filename.startsWith('http')) return filename;
-  return `${API_URL}/uploads/${filename}`;
 }
 
 export function getUniqueUsers(items = []) {

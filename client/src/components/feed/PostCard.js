@@ -5,10 +5,18 @@ import { toast } from 'sonner';
 import { getComments, createComment } from '../../actions/comments';
 import { getReplies, createReply } from '../../actions/replies';
 import { getReacts, toggleReact } from '../../actions/reacts';
-import { getFirstName, getUserInitial, getUploadUrl, getUniqueUsers } from '../../actions/utils';
+import { getFirstName, getUserInitial, getUniqueUsers } from '../../actions/utils';
 import UserAvatar from './UserAvatar';
 import TimeAgo from './TimeAgo';
 import EngagementListModal from './EngagementListModal';
+
+const PUBLIC_API_URL =process.env.NEXT_PUBLIC_API_URL || "https://appify-backend.marjii.com" || 'http://localhost:7050';
+
+function buildUploadUrl(filename) {
+  if (!filename) return null;
+  if (filename.startsWith('http')) return filename;
+  return `${PUBLIC_API_URL}/uploads/${filename}`;
+}
 
 const INITIAL_COMMENTS = 2;
 const LOAD_MORE_COMMENTS = 5;
@@ -216,7 +224,7 @@ function CommentBubble({ item, targetType = 'comment', showReplyAction = false, 
   const [likesModalOpen, setLikesModalOpen] = useState(false);
   const [likers, setLikers] = useState([]);
   const [loadingLikers, setLoadingLikers] = useState(false);
-  const imageUrl = getUploadUrl(item.image);
+  const imageUrl = buildUploadUrl(item.image);
 
   const handleLike = () => {
     startTransition(async () => {
@@ -708,7 +716,7 @@ export function PostReactions({ post, user, commentsCount }) {
 }
 
 export function PostCard({ post, user }) {
-  const imageUrl = getUploadUrl(post.image);
+  const imageUrl = buildUploadUrl(post.image);
   const firstName = getFirstName(post);
   const userInitial = getUserInitial(post);
   const [commentsCount, setCommentsCount] = useState(Number(post.comments_count) || 0);

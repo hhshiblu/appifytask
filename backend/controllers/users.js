@@ -27,17 +27,6 @@ const loginUser=async (req,res,_next)=>{
         const {email,password,remember_me}=req.body
         const rememberMe = remember_me === true || remember_me === 'true'
         const result=await loginService(email,password,rememberMe)
-        
-        const maxAge = rememberMe
-            ? 7 * 24 * 60 * 60 * 1000
-            : 24 * 60 * 60 * 1000
-
-        res.cookie("token", result.token, {
-            httpOnly: process.env.NODE_ENV === "production" ? true : false,
-            secure: process.env.NODE_ENV === "production" ? true : false,
-            sameSite: process.env.NODE_ENV === "production" ? "strict" : "lax",
-            maxAge,
-        });
 
         res.status(200).json({
             success: true,
@@ -56,14 +45,6 @@ const createUser=async (req,res,_next)=>{
     try{
         const {first_name,last_name,email,password}=req.body
         const result=await createUserService(first_name,last_name,email,password)
-        
-        //cookie save
-        res.cookie("token", result.token, {
-            httpOnly: process.env.NODE_ENV === "production" ? true : false,
-            secure: process.env.NODE_ENV === "production" ? true : false,
-            sameSite: process.env.NODE_ENV === "production" ? "strict" : "lax",
-            maxAge: 24 * 60 * 60 * 1000,
-        });
 
         res.status(200).json({
             success: true,
@@ -97,10 +78,7 @@ const changePassword=async(_req,res,_next)=>{
     try{
         const {email,newPassword}=_req.body
         const result=await changePasswordService(email,newPassword)
-        
-        //cookie clear
-        res.clearCookie("token")
-        
+
         res.status(200).json({
             success: true,
             data: result,
@@ -114,11 +92,6 @@ const changePassword=async(_req,res,_next)=>{
 }
 
 const logoutUser=async(_req,res)=>{
-    res.clearCookie("token", {
-        httpOnly: process.env.NODE_ENV === "production" ? true : false,
-        secure: process.env.NODE_ENV === "production" ? true : false,
-        sameSite: process.env.NODE_ENV === "production" ? "strict" : "lax",
-    });
     res.status(200).json({ success: true, message: "Logged out" });
 }
 

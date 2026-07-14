@@ -27,12 +27,10 @@ services:
     container_name: appify-backend
     restart: unless-stopped
     env_file: .env
-    environment:
-      PORT: ${BACKEND_PORT}
     ports:
-      - "${BACKEND_PORT}:7050"
+      - "${PORT}:7050"
     volumes:
-      - ./backend/uploads:/app/uploads
+      - backend_uploads:/app/uploads
     depends_on:
       appify-mysql:
         condition: service_healthy
@@ -44,11 +42,10 @@ services:
       context: ./client
     container_name: appify-client
     restart: unless-stopped
-    env_file: .env
-    environment:
-      PORT: ${CLIENT_PORT}
+    env_file:
+      - .env
     ports:
-      - "${CLIENT_PORT}:${CLIENT_PORT}"
+      - "3000:3000"
     depends_on:
       - appify-backend
     networks:
@@ -56,6 +53,7 @@ services:
 
 volumes:
   mysql_data:
+  backend_uploads:
 
 networks:
   app-network:
